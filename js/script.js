@@ -8,6 +8,12 @@ $(document).ready(function () {
     cls = [1, 2, 3, 4, 5, 6, 8, 7];
     classWithPair = cls.concat(cls);
 
+    let moves = 0;
+    let matches = 0;
+    let accuracy = matches / moves;
+    const $flippedImages = $([])
+    const matchArray = [];
+
     // change difficulty
     $('#easy').on('click', changeGrid);
     $('#med').on('click', changeGrid);
@@ -17,10 +23,12 @@ $(document).ready(function () {
     $start.on('click', renderGrid);
 
 
-    // render images in pairs
+    $('img').on('click', showImages);
+
+    // ajax, render images in pairs
     function renderGrid() {
         $.ajax({
-            url: "https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=10&concept_tags=True"
+            url: "https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=9&concept_tags=True"
         }).then(
             function (data) {
                 // shuffleIds(classWithPair);
@@ -32,17 +40,50 @@ $(document).ready(function () {
                             $(`.${i}`).attr('src', data[i].url);
                         });
                                
-            } hideImages();
+            } hideImages($('img'));
+            gameRound();
         },
             function (error) {
-                console.log(error)
+                alert('error');
             }
             )};
     
-
     // hide images immediately after rendering with ajax
-    function hideImages() {
-        $gridArray.attr('class', 'hide');
+    function hideImages(img) {
+        $(img).addClass('hide');
+    }
+
+    // show images with click
+    function showImages(evt) {
+        $(evt.target).removeClass('hide');
+        $flippedImages.push($(evt.target));
+        gameRound();
+    }
+
+    function gameRound() {
+        gameEnd();
+        if ($flippedImages.length === 2) {
+            moves += 1;
+            $('.moves').html(`Moves: ${moves}`);
+            if ($flippedImages.eq(0)[0].attr('class') === $flippedImages.eq(1)[0].attr('class')) {
+                matches += 1;
+                $('.accuracy').html(`Accuracy: ${accuracy}`);
+                matchArray.push($flippedImages.splice(0, 2));
+        } else {
+            hideImages($flippedImages[0]);
+            hideImages($flippedImages[1]);
+            $flippedImages.splice(0, 2);
+        }
+        }
+    }
+
+    function gameEnd () {
+        if (matchArray.length === cls.length) {
+            alert('Congratulations, you win!');
+            $start.off()
+        } else {
+            return;
+        }
     }
 
     // change difficulty
@@ -75,20 +116,3 @@ $(document).ready(function () {
 //     }
 
 // });
-
-/*
-    to do:
-    hide images upon rendering them, add visble card layout in background
-    click listeners on imgs to show them
-    game function
-        limit rounds of showing images (after two choices, hide images again)
-        check to see if classes match
-        keep images up if they match
-        if no images are hidden, alert that user won
-
-
-
-        time the game
-        count how many clicks (moves = clicks / 2), (accuracy = images up / clicks)
-        append all the this info to the html
-*/
