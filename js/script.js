@@ -5,7 +5,7 @@ $(document).ready(function () {
     let $grid = $(document.querySelectorAll('img'));
     const $gridArray = $(Array.from($grid));
 
-    cls = [1, 2, 3, 4, 5, 6, 7, 8];
+    cls = [1, 2, 3, 4, 5, 6, 8, 7];
     classWithPair = cls.concat(cls);
 
     // change difficulty
@@ -13,9 +13,12 @@ $(document).ready(function () {
     $('#med').on('click', changeGrid);
     $('#hard').on('click', changeGrid);
 
-    $start.on('click', fillGrid);
+    // render images in pairs
+    $start.on('click', renderGrid);
 
-    function fillGrid() {
+
+    // render images in pairs
+    function renderGrid() {
         $.ajax({
             url: "https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=10&concept_tags=True"
         }).then(
@@ -28,13 +31,20 @@ $(document).ready(function () {
                             $(data).each(function () {
                             $(`.${i}`).attr('src', data[i].url);
                         });
-            }
+                               
+            } hideImages();
         },
             function (error) {
                 console.log(error)
             }
             )};
     
+
+    // hide images immediately after rendering with ajax
+    function hideImages() {
+        $gridArray.attr('class', 'hide');
+    }
+
     // change difficulty
     function changeGrid(evt) {
         if ($(evt.target).attr('id') === 'easy') {
@@ -66,3 +76,19 @@ $(document).ready(function () {
 
 // });
 
+/*
+    to do:
+    hide images upon rendering them, add visble card layout in background
+    click listeners on imgs to show them
+    game function
+        limit rounds of showing images (after two choices, hide images again)
+        check to see if classes match
+        keep images up if they match
+        if no images are hidden, alert that user won
+
+
+
+        time the game
+        count how many clicks (moves = clicks / 2), (accuracy = images up / clicks)
+        append all the this info to the html
+*/
