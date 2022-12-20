@@ -6,7 +6,7 @@
 
 body {
     display: grid;
-    grid-template-columns: 10% 87% 3%;
+    grid-template-columns: 15% 83% 2%;
     grid-template-rows: 10% 70% 25%;
 }
 
@@ -31,7 +31,6 @@ section {
     grid-row: 2 / 4;
     grid-column: 2;
     text-align: center;
-    /* background-color: black; */
 }
 
 aside {
@@ -40,7 +39,6 @@ aside {
     text-align: left;
     grid-row: 2 / 4;
     padding-inline-start: 15px;
-    /* background-color: grey; */
     padding-top: 70px;
 }
 
@@ -60,6 +58,12 @@ img {
     height: 150px;
 }
 
+#dialogue {
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+}
+
 .container {
     grid-column: span 1;
     grid-row: span 1;
@@ -67,16 +71,21 @@ img {
     height: 150px;
     border: 3px solid black;
 }
+
+.hide {
+    opacity: 0;
+}
+
 .gallery16 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    grid-gap: 20px;
+    grid-gap: 10px;
     margin: 20px;
     justify-content: center;
 }
 
-.gallery20 {
+/* .gallery20 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(5, 1fr);
@@ -92,12 +101,4 @@ img {
     grid-gap: 10px;
     margin: 20px;
     justify-content: center;
-}
-
-.hide {
-    opacity: 0;
-}
-
-.match {
-    box-shadow: 0px 0px 30px #39FF14;
-}
+} */
