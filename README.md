@@ -13,15 +13,13 @@ A web application that utilizes randomized images from NASA's Astronomy Photo of
 
 ## Screenshots
 
-Web application layout
+![Mid game play](astronomy-game-midplay.png)
+<br>
+<br>
+<br>
+![win](astronomy-game-win.png)
 
-After images are rendered
-
-Mid game play
-
-Win
-
-### Getting Started
+## Getting Started
 
 **[Click here](https://ambertav.github.io/astronomy-memory-game/) to see the deployed application**
 
