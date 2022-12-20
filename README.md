@@ -13,11 +13,11 @@ A web application that utilizes randomized images from NASA's Astronomy Photo of
 
 ## Screenshots
 
-![Mid game play](astronomy-game-midplay.png)
+![Mid game play](https://i.imgur.com/I0AYtsW.png)
 <br>
 <br>
 <br>
-![win](astronomy-game-win.png)
+![win](https://i.imgur.com/hx2F2df.png)
 
 ## Getting Started
 
