@@ -30,11 +30,11 @@ $(document).ready(function () {
                 });
                 for (let i = 1; i < 9; i++) {
                     $(data).each(function () {
-                        $(`.${i}`).attr('src', data[i].url);
+                        $(`.${i}`).attr('src', data[i].hdurl);
                     });       
                 } setTimeout (function (){
                     hideImages($('img'));
-                }, 3000);
+                }, 3500);
                 gameRound();
             }
         );
@@ -131,6 +131,4 @@ $(document).ready(function () {
     //         $section.attr('class', 'gallery24');
     //     }
     // }
-});  
-        
-        
+});
