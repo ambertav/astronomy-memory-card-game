@@ -1,7 +1,7 @@
 
-# Astronomy Memory Card Game
+# Astronomy Memory Game
 
-A memory game web application that utilizes images from NASA's Astronomy Photo of the Day (APOD) API
+A web application that utilizes images from NASA's Astronomy Photo of the Day (APOD) API as the cards for a matching game
 
 ## Technologies Used
 
@@ -16,7 +16,7 @@ A memory game web application that utilizes images from NASA's Astronomy Photo o
 
 ### Getting Started
 
-**[Click here](https://ambertav.github.io/astronomy-memory-card-game/) to see the deployed application**
+**[Click here](https://ambertav.github.io/astronomy-memory-game/) to see the deployed application**
 
 
 ### Future Enhancements
