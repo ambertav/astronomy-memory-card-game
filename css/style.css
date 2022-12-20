@@ -39,7 +39,7 @@ aside {
     text-align: left;
     grid-row: 2 / 4;
     padding-inline-start: 15px;
-    padding-top: 70px;
+    padding-top: 90px;
 }
 
 ul {
@@ -59,9 +59,8 @@ img {
 }
 
 #dialogue {
-    margin-top: 20px;
+    margin-top: 50px;
     font-size: 18px;
-    text-align: center;
 }
 
 .container {

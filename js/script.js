@@ -1,12 +1,11 @@
 $(document).ready(function () {
-    const $section = $('section');
     const $start = $('button');
     const $dialogue = $('#dialogue');
-
+    
     let $grid = $(document.querySelectorAll('img'));
     const $gridArray = $(Array.from($grid));
 
-    cls = [1, 2, 3, 4, 5, 6, 8, 7];
+    cls = [1, 2, 3, 4, 5, 6, 7, 8];
     classWithPair = cls.concat(cls);
 
     let moves = 0;
@@ -14,17 +13,12 @@ $(document).ready(function () {
     const $flippedImages = $([])
     let matchArray = [];
 
-    // render images in pairs
     $start.on('click', renderGrid);
     
     $('img').on('click', showImages);
     
-    // ajax, render images in pairs
     function renderGrid() {
-        matchArray = [];
-        moves = 0;
-        matches = 0;
-        $('#acc').html(`Accuracy: 0%`);
+        gameReset();
         $dialogue.html('Get ready...');
         $.ajax({
             url: "https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=9"
@@ -42,17 +36,15 @@ $(document).ready(function () {
                     hideImages($('img'));
                 }, 3000);
                 gameRound();
-            },
-            function (error) {
-                alert('error');
             }
-            )};
+        );
+    }
             
     function hideImages(img) {
         setTimeout(function () {
             $(img).addClass('hide');
             $dialogue.html('Click on two images');
-            }, 750);
+        }, 750);
     }
             
     function showImages(evt) {
@@ -94,8 +86,16 @@ $(document).ready(function () {
             
     function gameEnd () {
         if (matchArray.length === cls.length) {
-            $dialogue.html('Congratulations, you win!<br><br><br>Click start game to play again');    
+            $dialogue.html('Congratulations, you win!<br><br><br><br>Click start game to play again');    
         }
+    }
+
+    function gameReset () {
+        matchArray = [];
+        moves = 0;
+        matches = 0;
+        $('#acc').html(`Accuracy: 0%`);
+        $('img').css('box-shadow', 'none');
     }
                
     // Fisher–Yates Shuffle
@@ -113,6 +113,9 @@ $(document).ready(function () {
     }
 
     // // change difficulty
+
+    // const $section = $('section');
+
     // $('#easy').on('click', changeGrid);
     // $('#med').on('click', changeGrid);
     // $('#hard').on('click', changeGrid);
