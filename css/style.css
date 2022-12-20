@@ -7,7 +7,8 @@
 body {
     display: grid;
     grid-template-columns: 15% 83% 2%;
-    grid-template-rows: 10% 70% 25%;
+    background: linear-gradient(100deg, rgba(0,0,0,1) 30%, rgb(83, 83, 83) 70%, rgb(168, 168, 168) 100%);
+    color: white;
 }
 
 header {
@@ -19,12 +20,11 @@ header {
 h1 {
     margin: 0px;
     height: 60%;
-    margin-bottom: 5px;
 }
 
 button {
     width: 10%;
-    height: 50%;
+    height: 40%;
 }
 
 section {
@@ -68,7 +68,7 @@ img {
     grid-row: span 1;
     width: 250px;
     height: 150px;
-    border: 3px solid black;
+    border: 3px solid white;
 }
 
 .hide {

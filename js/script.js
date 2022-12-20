@@ -34,7 +34,7 @@ $(document).ready(function () {
                     });       
                 } setTimeout (function (){
                     hideImages($('img'));
-                }, 3500);
+                }, 5000);
                 gameRound();
             }
         );
