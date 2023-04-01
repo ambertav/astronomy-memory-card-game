@@ -1,34 +1,38 @@
 $(document).ready(function () {
     const $start = $('button');
     const $dialogue = $('#dialogue');
-    
-    let $grid = $(document.querySelectorAll('img'));
-    const $gridArray = $(Array.from($grid));
+    const $section = $('section');
 
-    cls = [1, 2, 3, 4, 5, 6, 7, 8];
-    classWithPair = cls.concat(cls);
+    let cls = []
+    let classWithPair = [];
 
     let moves = 0;
     let matches = 0;
     const $flippedImages = $([])
     let matchArray = [];
+    
+    $('#easy').on('click', changeGrid);
+    $('#med').on('click', changeGrid);
+    $('#hard').on('click', changeGrid);
 
     $start.on('click', renderGrid);
-    
-    $('.container').on('click', showImages);
+    $(document).on('click', '.container', showImages)
     
     function renderGrid() {
         gameReset();
         $dialogue.html('Get ready...');
         $.ajax({
-            url: "https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=8"
+            url: `https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=${cls.length}`
         }).then(
             function (data) {
+                classWithPair = cls.concat(cls);
                 shuffleClass(classWithPair);
+                let $grid = $(document.querySelectorAll('img'));
+                const $gridArray = $(Array.from($grid));
                 $gridArray.each(function (index) {
                     $(`#${index + 1}`).attr('class', classWithPair[index]);
                 });
-                for (let i = 0; i < 8; i++) {
+                for (let i = 0; i < cls.length; i++) {
                     $(data).each(function () {
                         $(`.${i + 1}`).attr('src', data[i].hdurl);
                     });       
@@ -43,7 +47,6 @@ $(document).ready(function () {
     function hideImages(img) {
         setTimeout(function () {
             $(img).hide();
-            // $(img).addClass('hide');
             $dialogue.html('Click on two images');
         }, 750);
     }
@@ -117,23 +120,27 @@ $(document).ready(function () {
         return array;
     }
 
-    // // change difficulty
-
-    // const $section = $('section');
-
-    // $('#easy').on('click', changeGrid);
-    // $('#med').on('click', changeGrid);
-    // $('#hard').on('click', changeGrid);
-            
-    // function changeGrid(evt) {
-    //     if ($(evt.target).attr('id') === 'easy') {
-    //         $section.attr('class', 'gallery16');
-    //     }
-    //     if ($(evt.target).attr('id') === 'med') {
-    //         $section.attr('class', 'gallery20');
-    //     }
-    //     if ($(evt.target).attr('id') === 'hard') {
-    //         $section.attr('class', 'gallery24');
-    //     }
-    // }
+    // change difficulty
+    function changeGrid(evt) {
+        if ($('img').attr('src')) return;
+        $('.container').remove();
+        cls = [1, 2, 3, 4, 5, 6, 7, 8];
+        let numberOfBoxes = 0;
+        if ($(evt.target).attr('id') === 'easy') {
+            numberOfBoxes = 16;
+        } else if ($(evt.target).attr('id') === 'med') {
+            numberOfBoxes = 20;
+            cls.push(9, 10);
+        } else if ($(evt.target).attr('id') === 'hard') {
+            numberOfBoxes = 24;
+            cls.push(9, 10, 11, 12);
+        }
+        $section.attr('class', `gallery${numberOfBoxes}`);
+        for (i = 1; i <= numberOfBoxes; i++) {
+            let $div = $('<div>').attr('class', 'container');
+            let $img = $('<img>').attr('id', i);
+            $div.append($img);
+            $section.append($div);
+        }
+    }
 });
