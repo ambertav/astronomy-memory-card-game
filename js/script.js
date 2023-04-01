@@ -15,22 +15,22 @@ $(document).ready(function () {
 
     $start.on('click', renderGrid);
     
-    $('img').on('click', showImages);
+    $('.container').on('click', showImages);
     
     function renderGrid() {
         gameReset();
         $dialogue.html('Get ready...');
         $.ajax({
-            url: "https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=9"
+            url: "https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=8"
         }).then(
             function (data) {
                 shuffleClass(classWithPair);
                 $gridArray.each(function (index) {
                     $(`#${index + 1}`).attr('class', classWithPair[index]);
                 });
-                for (let i = 1; i < 9; i++) {
+                for (let i = 0; i < 8; i++) {
                     $(data).each(function () {
-                        $(`.${i}`).attr('src', data[i].hdurl);
+                        $(`.${i + 1}`).attr('src', data[i].hdurl);
                     });       
                 } setTimeout (function (){
                     hideImages($('img'));
@@ -42,16 +42,21 @@ $(document).ready(function () {
             
     function hideImages(img) {
         setTimeout(function () {
-            $(img).addClass('hide');
+            $(img).hide();
+            // $(img).addClass('hide');
             $dialogue.html('Click on two images');
         }, 750);
     }
             
     function showImages(evt) {
-        $(evt.target).removeClass('hide');
-        $(evt.target).css('box-shadow', '0px 0px 30px yellow');
-        $flippedImages.push($(evt.target));
-        gameRound();
+        $clickedImg = $($(evt.target).children());
+        if ($clickedImg.attr('src')) {
+            if ($clickedImg.is(':visible')) return;
+            $clickedImg.show();
+            $clickedImg.css('box-shadow', '0px 0px 30px yellow');
+            $flippedImages.push($clickedImg);
+            gameRound();
+            }
         }
             
     function gameRound() {
