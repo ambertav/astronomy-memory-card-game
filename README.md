@@ -1,7 +1,7 @@
 
 # Astronomy Memory Game
 
-A web application that utilizes randomized images from NASA's Astronomy Photo of the Day (APOD) API as the cards for a memory matching game
+A web application that utilizes randomized images from NASA's Astronomy Photo of the Day (APOD) API as the cards for a memory matching game.
 
 ## Technologies Used
 
@@ -10,14 +10,15 @@ A web application that utilizes randomized images from NASA's Astronomy Photo of
 - JavaScript
 - jQuery
 - APOD API
+- GitHub Pages
 
 ## Screenshots
 
-![Mid game play](https://i.imgur.com/I0AYtsW.png)
+![Mid game play](https://i.imgur.com/WGqC4zB.png)
 <br>
 <br>
 <br>
-![win](https://i.imgur.com/hx2F2df.png)
+![win](https://i.imgur.com/08Ukk1r.png)
 
 ## Getting Started
 
@@ -27,5 +28,5 @@ A web application that utilizes randomized images from NASA's Astronomy Photo of
 
 To enable the user to:
 
-- Change difficulties (easy, medium, hard) defined by increasing number of images, and decreasing the time between rendering images and hiding them
-- Save game scores to localstorage
+- Differentiate score history on each of the three levels
+- Save scores to local storage
