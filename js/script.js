@@ -56,7 +56,7 @@ $(document).ready(function () {
         if ($clickedImg.attr('src')) {
             if ($clickedImg.is(':visible')) return;
             $clickedImg.show();
-            $clickedImg.css('box-shadow', '0px 0px 30px yellow');
+            $clickedImg.css('box-shadow', '0px 0px 10px yellow');
             $flippedImages.push($clickedImg);
             gameRound();
             }
@@ -68,7 +68,7 @@ $(document).ready(function () {
             if ($flippedImages.eq(0)[0].attr('class') === $flippedImages.eq(1)[0].attr('class')) {
                 matches += 1;
                 $flippedImages.each(function (index) {
-                    $flippedImages.eq(index)[0].css('box-shadow', '0px 0px 40px #39FF14');
+                    $flippedImages.eq(index)[0].css('box-shadow', '0px 0px 10px #39FF14');
                 });
                 $dialogue.html('It\'s a match!');
                 matchArray.push($flippedImages.splice(0, 2));
