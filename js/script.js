@@ -41,7 +41,11 @@ $(document).ready(function () {
                 }, 5000);
                 gameRound();
             }
-        );
+        )
+        .catch(function (jqXHR) {
+            $dialogue.html(`${jqXHR.statusText.toUpperCase()}: status code ${jqXHR.status}, ${jqXHR.responseText}.`)
+            .css('font-weight','bold');
+        });
     }
             
     function hideImages(img) {
