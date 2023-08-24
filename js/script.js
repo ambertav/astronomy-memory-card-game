@@ -3,73 +3,85 @@ $(document).ready(function () {
     const $dialogue = $('#dialogue');
     const $section = $('section');
 
-    let cls = []
+    let cls = [];
     let classWithPair = [];
 
     let moves = 0;
     let matches = 0;
     const $flippedImages = $([])
     let matchArray = [];
-    
+
     $('#easy').on('click', changeGrid);
     $('#med').on('click', changeGrid);
     $('#hard').on('click', changeGrid);
 
     $start.on('click', renderGrid);
     $(document).on('click', '.container', showImages)
-    
-    function renderGrid() {
+
+    async function renderGrid() {
         gameReset();
-        $dialogue.html('Get ready...');
-        $.ajax({
-            url: `https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=${cls.length}`
-        }).then(
-            function (data) {
-                classWithPair = cls.concat(cls);
-                shuffleClass(classWithPair);
-                let $grid = $(document.querySelectorAll('img'));
-                const $gridArray = $(Array.from($grid));
-                $gridArray.each(function (index) {
-                    $(`#${index + 1}`).attr('class', classWithPair[index]);
-                });
-                for (let i = 0; i < cls.length; i++) {
-                    $(data).each(function () {
-                        $(`.${i + 1}`).attr('src', data[i].hdurl);
-                    });       
-                } setTimeout (function (){
-                    hideImages($('img'));
-                }, 5000);
-                gameRound();
-            }
-        )
-        .catch(function (jqXHR) {
-            $dialogue.html(`${jqXHR.statusText.toUpperCase()}: status code ${jqXHR.status}, ${jqXHR.responseText}.`)
-            .css('font-weight','bold');
-        });
-    }
+        $dialogue.html('Generating board...');
+
+        try {
+            const data = await $.ajax({
+                url: `https://api.nasa.gov/planetary/apod?api_key=hIlNblkyFJyGSZstYSaXgPk0m9o3WKjNpP1iHb6F&count=${cls.length}`
+            });
             
+            // shuffles pairs of classes so that the pairs will not be next to each other
+            classWithPair = cls.concat(cls);
+            shuffleClass(classWithPair);
+
+            // assigns classes to img for future pair matching
+            for (i = 0; i < classWithPair.length; i++) {
+                $(`#${i + 1}`).attr('class', classWithPair[i]);
+            }
+            // assigns src from data for each img
+            for (i = 0; i < data.length; i++) {
+                $(`.${i + 1}`).attr('src', data[i].hdurl);
+            }
+
+            // verifies that each image was assigned a src from the data
+            if ($('[src=""]').length === 0) $('img').show();
+            else renderGrid();
+
+            $dialogue.html('Get ready...');
+
+            setTimeout(function () {
+                hideImages($('img'));
+            }, 8000);
+
+            gameRound();
+        } catch (jqXHR) {
+            $dialogue.html(`${jqXHR.statusText.toUpperCase()}: status code ${jqXHR.status}, ${jqXHR.responseText}.`)
+                .css('font-weight', 'bold');
+        }
+    }
+
+
     function hideImages(img) {
         setTimeout(function () {
             $(img).hide();
             $dialogue.html('Click on two images');
         }, 750);
     }
-            
+
     function showImages(evt) {
         $clickedImg = $($(evt.target).children());
         if ($clickedImg.attr('src')) {
             if ($clickedImg.is(':visible')) return;
-            $clickedImg.show();
-            $clickedImg.css('box-shadow', '0px 0px 10px yellow');
+            $clickedImg.show().css('box-shadow', '0px 0px 10px yellow');
             $flippedImages.push($clickedImg);
             gameRound();
-            }
         }
-            
+    }
+
     function gameRound() {
         if ($flippedImages.length === 2) {
             moves += 1;
-            if ($flippedImages.eq(0)[0].attr('class') === $flippedImages.eq(1)[0].attr('class')) {
+            const imageClass1 = $flippedImages.eq(0)[0].attr('class');
+            const imageClass2 = $flippedImages.eq(1)[0].attr('class');
+
+            if (imageClass1 === imageClass2) {
                 matches += 1;
                 $flippedImages.each(function (index) {
                     $flippedImages.eq(index)[0].css('box-shadow', '0px 0px 10px #39FF14');
@@ -78,14 +90,14 @@ $(document).ready(function () {
                 matchArray.push($flippedImages.splice(0, 2));
             } else {
                 $dialogue.html('Not a match... try again');
-                hideImages($flippedImages[0]);
+                hideImages($flippedImages);
                 hideImages($flippedImages[1]);
                 $flippedImages.splice(0, 2);
             }
         }
         gameUpdate();
     }
-            
+
     function gameUpdate() {
         $('#moves').html(`Moves: ${moves}`);
         $('#matches').html(`Matches: ${matches}`);
@@ -95,23 +107,23 @@ $(document).ready(function () {
         }
         gameEnd();
     }
-            
-    function gameEnd () {
+
+    function gameEnd() {
         if (matchArray.length === cls.length) {
-            $dialogue.html('Congratulations, you win!<br><br><br><br>Click start game to play again');    
+            $dialogue.html('Congratulations, you win!<br><br><br><br>Click start game to play again');
         }
     }
 
-    function gameReset () {
+    function gameReset() {
         matchArray = [];
         moves = 0;
         matches = 0;
         $('#acc').html(`Accuracy: 0%`);
         $('img').css('box-shadow', 'none');
     }
-               
+
     // Fisher–Yates Shuffle
-    function shuffleClass (array) {
+    function shuffleClass(array) {
         let m = array.length;
         let t;
         let i;
@@ -142,7 +154,7 @@ $(document).ready(function () {
         $section.attr('class', `gallery${numberOfBoxes}`);
         for (i = 1; i <= numberOfBoxes; i++) {
             let $div = $('<div>').attr('class', 'container');
-            let $img = $('<img>').attr('id', i);
+            let $img = $('<img>').attr('id', i).attr('src', '').hide();
             $div.append($img);
             $section.append($div);
         }
