@@ -8,14 +8,33 @@ $(document).ready(function () {
 
     let moves = 0;
     let matches = 0;
-    const $flippedImages = $([])
+    const $flippedImages = $([]);
     let matchArray = [];
+    let difficulty = '';
 
+    const statStructure = {
+        easy: {
+            moves: 0,
+            matches: 0,
+            accuracy: 0
+        },
+        med: {
+            moves: 0,
+            matches: 0,
+            accuracy: 0
+        },
+        hard: {
+            moves: 0,
+            matches: 0,
+            accuracy: 0
+        },
+    };
+  
     $('#easy, #med, #hard').on('click', changeGrid);
     $start.on('click', renderGrid);
-    $section.on('click', '.container', showImages)
+    $section.on('click', '.container', showImages);
 
-    async function renderGrid() {
+    async function renderGrid () {
         gameReset();
         $dialogue.html('Generating board...');
 
@@ -58,14 +77,14 @@ $(document).ready(function () {
     }
 
 
-    function hideImages(img) {
+    function hideImages (img) {
         setTimeout(function () {
             $(img).hide();
             $dialogue.html('Click on two images');
         }, 750);
     }
 
-    function showImages(evt) {
+    function showImages (evt) {
         $clickedImg = $($(evt.target).children());
         if ($clickedImg.attr('src')) {
             if ($clickedImg.is(':visible')) return;
@@ -75,7 +94,7 @@ $(document).ready(function () {
         }
     }
 
-    function gameRound() {
+    function gameRound () {
         if ($flippedImages.length === 2) {
             moves += 1;
             const imageClass1 = $flippedImages.eq(0)[0].attr('class');
@@ -98,24 +117,23 @@ $(document).ready(function () {
         gameUpdate();
     }
 
-    function gameUpdate() {
+    function gameUpdate () {
         $('#moves').html(`Moves: ${moves}`);
         $('#matches').html(`Matches: ${matches}`);
         let accuracy = `${Math.round((matches / moves) * 100)}%`;
-        if (accuracy !== 'NaN%') {
-            $('#acc').html(`Accuracy: ${accuracy}`);
-        }
+        if (accuracy !== 'NaN%') $('#acc').html(`Accuracy: ${accuracy}`);
         gameEnd();
     }
 
-    function gameEnd() {
+    function gameEnd () {
         if (matchArray.length === cls.length) { 
             $dialogue.html('Congratulations, you win!<br><br><br>Change difficulty and/or click start game to play again');
             $('#easy, #med, #hard, #start').attr('disabled', false);
+            saveGameStats(difficulty, moves, matches);
         }
     }
 
-    function gameReset() {
+    function gameReset () {
         matchArray = [];
         moves = 0;
         matches = 0;
@@ -124,7 +142,7 @@ $(document).ready(function () {
     }
 
     // Fisher–Yates Shuffle
-    function shuffleClass(array) {
+    function shuffleClass (array) {
         let m = array.length;
         let t;
         let i;
@@ -138,19 +156,25 @@ $(document).ready(function () {
     }
 
     // change difficulty
-    function changeGrid(evt) {
+    function changeGrid (evt) {
         $('.container').remove();
+        difficulty = $(evt.target).attr('id');
+        const stats = getGameStats(difficulty);
+
+        historyUpdate(stats);
+
         cls = [1, 2, 3, 4, 5, 6, 7, 8];
         let numberOfBoxes = 0;
-        if ($(evt.target).attr('id') === 'easy') {
+        if (difficulty === 'easy') {
             numberOfBoxes = 16;
-        } else if ($(evt.target).attr('id') === 'med') {
+        } else if (difficulty === 'med') {
             numberOfBoxes = 20;
             cls.push(9, 10);
-        } else if ($(evt.target).attr('id') === 'hard') {
+        } else if (difficulty === 'hard') {
             numberOfBoxes = 24;
             cls.push(9, 10, 11, 12);
         }
+
         $section.attr('class', `gallery${numberOfBoxes}`);
         for (i = 1; i <= numberOfBoxes; i++) {
             let $div = $('<div>').attr('class', 'container');
@@ -160,4 +184,31 @@ $(document).ready(function () {
             $start.removeAttr('disabled');
         }
     }
+
+    function saveGameStats (difficulty, moves, matches) {
+        const storedStats = JSON.parse(localStorage.getItem('gameStats')) || statStructure;
+
+        if (!storedGameStats[difficulty]) storedGameStats[difficulty] = { moves: 0, matches: 0, accuracy: 0 };  
+
+        storedStats[difficulty].moves += moves;
+        storedStats[difficulty].matches += matches;
+
+        storedStats[difficulty].accuracy = Math.round((storedStats[difficulty].matches / storedStats[difficulty].moves) * 100);
+
+        localStorage.setItem('gameStats', JSON.stringify(storedStats));
+        historyUpdate(storedStats[difficulty]);
+    }
+
+    function getGameStats (difficulty) {
+        const storedStats = JSON.parse(localStorage.getItem('gameStats')) || statStructure;
+        
+        return storedStats[difficulty] || { moves: 0, matches: 0, accuracy: 0 };
+    }
+
+    function historyUpdate (stats) {
+        $('#historyMoves').html(`Moves: ${stats.moves}`);
+        $('#historyMatches').html(`Matches: ${stats.matches}`);
+        if (stats.accuracy !== 'NaN%') $('#historyAcc').html(`Accuracy: ${stats.accuracy}%`);
+    }
+
 });
