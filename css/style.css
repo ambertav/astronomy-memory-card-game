@@ -27,11 +27,6 @@ h1 {
     height: 60%;
 }
 
-button {
-    width: 10%;
-    height: 40%;
-}
-
 section {
     grid-row: 2 / 4;
     grid-column: 2;
@@ -53,8 +48,14 @@ ul {
     height: 15%;
 }
 
-li {
-    padding: 15px;
+ul > button {
+    margin: 0.3rem;
+    padding-inline-start: 0%;
+}
+
+#start {
+    width: 15%;
+    height: 50%;
 }
 
 .container > img {
