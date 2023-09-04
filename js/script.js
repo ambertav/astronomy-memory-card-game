@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    const $start = $('button');
+    const $start = $('#start');
     const $dialogue = $('#dialogue');
     const $section = $('section');
 
@@ -11,16 +11,15 @@ $(document).ready(function () {
     const $flippedImages = $([])
     let matchArray = [];
 
-    $('#easy').on('click', changeGrid);
-    $('#med').on('click', changeGrid);
-    $('#hard').on('click', changeGrid);
-
+    $('#easy, #med, #hard').on('click', changeGrid);
     $start.on('click', renderGrid);
-    $(document).on('click', '.container', showImages)
+    $section.on('click', '.container', showImages)
 
     async function renderGrid() {
         gameReset();
         $dialogue.html('Generating board...');
+
+        $('#easy, #med, #hard, #start').attr('disabled', true);
 
         try {
             const data = await $.ajax({
@@ -51,6 +50,7 @@ $(document).ready(function () {
             }, 8000);
 
             gameRound();
+
         } catch (jqXHR) {
             $dialogue.html(`${jqXHR.statusText.toUpperCase()}: status code ${jqXHR.status}, ${jqXHR.responseText}.`)
                 .css('font-weight', 'bold');
@@ -90,7 +90,7 @@ $(document).ready(function () {
                 matchArray.push($flippedImages.splice(0, 2));
             } else {
                 $dialogue.html('Not a match... try again');
-                hideImages($flippedImages);
+                hideImages($flippedImages[0]);
                 hideImages($flippedImages[1]);
                 $flippedImages.splice(0, 2);
             }
@@ -109,8 +109,9 @@ $(document).ready(function () {
     }
 
     function gameEnd() {
-        if (matchArray.length === cls.length) {
-            $dialogue.html('Congratulations, you win!<br><br><br><br>Click start game to play again');
+        if (matchArray.length === cls.length) { 
+            $dialogue.html('Congratulations, you win!<br><br><br>Change difficulty and/or click start game to play again');
+            $('#easy, #med, #hard, #start').attr('disabled', false);
         }
     }
 
@@ -138,7 +139,6 @@ $(document).ready(function () {
 
     // change difficulty
     function changeGrid(evt) {
-        if ($('img').attr('src')) return;
         $('.container').remove();
         cls = [1, 2, 3, 4, 5, 6, 7, 8];
         let numberOfBoxes = 0;
@@ -157,6 +157,7 @@ $(document).ready(function () {
             let $img = $('<img>').attr('id', i).attr('src', '').hide();
             $div.append($img);
             $section.append($div);
+            $start.removeAttr('disabled');
         }
     }
 });
