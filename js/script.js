@@ -127,7 +127,7 @@ $(document).ready(function () {
 
     function gameEnd () {
         if (matchArray.length === cls.length) { 
-            $dialogue.html('Congratulations, you win!<br><br><br>Change difficulty and/or click start game to play again');
+            $dialogue.html('Congratulations, you win!<br><br>Change difficulty and/or click start game to play again');
             $('#easy, #med, #hard, #start').attr('disabled', false);
             saveGameStats(difficulty, moves, matches);
         }
@@ -187,8 +187,7 @@ $(document).ready(function () {
 
     function saveGameStats (difficulty, moves, matches) {
         const storedStats = JSON.parse(localStorage.getItem('gameStats')) || statStructure;
-
-        if (!storedGameStats[difficulty]) storedGameStats[difficulty] = { moves: 0, matches: 0, accuracy: 0 };  
+        if (!storedStats[difficulty]) storedStats[difficulty] = statStructure;  
 
         storedStats[difficulty].moves += moves;
         storedStats[difficulty].matches += matches;
@@ -201,8 +200,8 @@ $(document).ready(function () {
 
     function getGameStats (difficulty) {
         const storedStats = JSON.parse(localStorage.getItem('gameStats')) || statStructure;
-        
-        return storedStats[difficulty] || { moves: 0, matches: 0, accuracy: 0 };
+
+        return storedStats[difficulty] || statStructure;
     }
 
     function historyUpdate (stats) {
