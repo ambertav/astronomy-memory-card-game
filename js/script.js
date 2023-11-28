@@ -79,7 +79,7 @@ $(document).ready(function () {
 
     function hideImages (img) {
         setTimeout(function () {
-            $(img).hide();
+            $(img).hide().parent().css('box-shadow', 'none');
             $dialogue.html('Click on two images');
         }, 750);
     }
@@ -88,7 +88,7 @@ $(document).ready(function () {
         $clickedImg = $($(evt.target).children());
         if ($clickedImg.attr('src')) {
             if ($clickedImg.is(':visible')) return;
-            $clickedImg.show().css('box-shadow', '0px 0px 10px yellow');
+            $clickedImg.show().parent().css('box-shadow', '0px 0px 15px yellow');
             $flippedImages.push($clickedImg);
             gameRound();
         }
@@ -103,7 +103,7 @@ $(document).ready(function () {
             if (imageClass1 === imageClass2) {
                 matches += 1;
                 $flippedImages.each(function (index) {
-                    $flippedImages.eq(index)[0].css('box-shadow', '0px 0px 10px #39FF14');
+                    $flippedImages.eq(index)[0].parent().css('box-shadow', '0px 0px 15px #39FF14');
                 });
                 $dialogue.html('It\'s a match!');
                 matchArray.push($flippedImages.splice(0, 2));
@@ -138,7 +138,7 @@ $(document).ready(function () {
         moves = 0;
         matches = 0;
         $('#acc').html(`Accuracy: 0%`);
-        $('img').css('box-shadow', 'none');
+        $('img').parent().css('box-shadow', 'none');
     }
 
     // Fisher–Yates Shuffle
